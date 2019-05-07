@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -34,14 +35,24 @@ public class MainActivity extends AppCompatActivity {
         displayQuantity(quantity);
 
     }
+
     public void submitOrder(View view){
+
+        CheckBox whippedCreamCheckBox = (CheckBox) findViewById(R.id.whippedCream);
+        boolean hasWhippedCream = whippedCreamCheckBox.isChecked();
+
 //        display(quantity * 5);
         int price = calculatePrice();
-        String priceMessage = creatOrderSummary(price);
+        String priceMessage = creatOrderSummary(price, hasWhippedCream);
         displayMessage(priceMessage);
     }
+
+    /**
+     * display method
+     * @param number
+     */
     private void display(int number){
-        quantityPrice = (TextView) findViewById(R.id.price_text);
+        quantityPrice = (TextView) findViewById(R.id.order_summary_text);
         quantityPrice.setText(NumberFormat.getCurrencyInstance().format(number));
     }
     private void displayQuantity(int numberOfCoffe){
@@ -58,16 +69,25 @@ public class MainActivity extends AppCompatActivity {
         int price = quantity * 5;
         return price;
     }
+
+    /**
+     *
+     * @param message
+     */
     private void displayMessage(String message){
-        TextView textView = (TextView) findViewById(R.id.price_text);
+        TextView textView = (TextView) findViewById(R.id.order_summary_text);
         textView.setText(message);
     }
 
-//    The createOrderSummary Method
-    private String creatOrderSummary(int price){
+/**    The createOrderSummary Method
+* @param price
+ *
+ */
+    private String creatOrderSummary(int price, boolean addWhippedCream){
 
         String name = "Ebeh Elisha";
         String message = "Name: " + name ;
+        message += "\n Add Whipped Cream? " + addWhippedCream;
         message = message +  "\n Quantity: " + quantity;
         message = message + "\n Total: $" + price;
         message = message + "\n Thank You";
