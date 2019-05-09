@@ -1,11 +1,15 @@
 package com.example.myapplication;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -24,14 +28,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void increment(View view) {
         if (quantity == 100) {
+            Toast.makeText(this, "You cannot have more than 100 coffee", Toast.LENGTH_SHORT).show();
             return;
         }
+
         quantity = quantity + 1;
         displayQuantity(quantity);
     }
 
     public void decrement(View view) {
         if (quantity == 0) {
+            Toast.makeText(this, "You cannot have less than 1 coffee", Toast.LENGTH_SHORT).show();
             return;
         }
         quantity = quantity - 1;
@@ -52,7 +59,15 @@ public class MainActivity extends AppCompatActivity {
 //        display(quantity * 5);
         int price = calculatePrice(hasWhippedCream, hasChocolateCream);
         String priceMessage = creatOrderSummary(price, hasWhippedCream, hasChocolateCream, displayName);
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:"));
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Just Java App Order" + displayName);
+        intent.putExtra(Intent.EXTRA_TEXT, priceMessage);
+        if(intent.resolveActivity(getPackageManager()) != null){
+                startActivity(intent);
+        }
         displayMessage(priceMessage);
+
     }
 
     /**
